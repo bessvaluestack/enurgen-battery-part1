@@ -5,7 +5,7 @@
 
 ## Purpose
 
-Blueprint for integrating BESS modeling into the DUET platform. This document defines module boundaries, interface contracts, and integration points so that Enurgen's engineering team can take the PoC code from Tasks 2A/2B and integrate it into the DUET production codebase.
+Blueprint for integrating BESS modeling into the DUET platform. This document defines module boundaries, interface contracts, and integration points so that Enurgen's engineering team can take the PoC code from Tasks 2A/2B and integrate it into the DUET production codebase via API contracts.
 
 **Audience:** Enurgen CTO and engineering team.
 
@@ -17,28 +17,28 @@ The BESS capability is decomposed into four modules with clear boundaries. This 
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    DUET Platform                         │
+│                    DUET Platform                        │
 │                                                         │
 │  ┌──────────────┐    ┌──────────────────────────────┐   │
-│  │   PV Model   │    │        BESS Module            │   │
+│  │   PV Model   │    │        BESS Module            │  │
 │  │  (existing)  │    │                              │   │
 │  │              │    │  ┌────────┐   ┌───────────┐  │   │
 │  │  Generation  │───▶│  │ SoC    │   │Degradation│  │   │
-│  │  Profiles    │    │  │Simulator│──▶│  Engine   │  │   │
-│  │              │    │  │(Task 2A)│   │ (Task 2B) │  │   │
+│  │  Profiles    │    │  │Simulator│──▶│  Engine   │  │  │
+│  │              │    │  │(Task 2A)│   │ (Task 2B) │  │  │
 │  └──────────────┘    │  └────┬───┘   └─────┬─────┘  │   │
 │                      │       │             │        │   │
 │                      │       ▼             ▼        │   │
-│                      │  ┌────────┐   ┌───────────┐  │   │
-│                      │  │Dispatch│   │ Financial  │  │   │
-│                      │  │Optimizer│  │   Layer    │  │   │
-│                      │  │(Task 3)│   │ (Task 4)  │  │   │
-│                      │  └────────┘   └───────────┘  │   │
+│                      │  ┌─────────┐   ┌───────────┐ │   │
+│                      │  │Dispatch │   │ Financial │ │   │
+│                      │  │Optimizer│   │   Layer   │ │   │
+│                      │  │(Task 3) │   │ (Task 4)  │ │   │
+│                      │  └─────────┘   └───────────┘ │   │
 │                      └──────────────────────────────┘   │
 │                                                         │
 │  ┌──────────────────────────────────────────────────┐   │
-│  │          Model vs. Actual Comparison              │   │
-│  │              (existing + extended)                 │   │
+│  │          Model vs. Actual Comparison             │   │
+│  │              (existing + extended)               │   │
 │  └──────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -222,89 +222,15 @@ class DegradationConfig:
 
 ---
 
-## 4. Dispatch Optimizer (Task 3 — Architecture Only)
+## 4. DUET Integration Points
 
-### 4.1 Responsibility
-
-Given prices, constraints, and current battery state, produce an optimal dispatch schedule. Formulated as LP/MILP/convex optimization.
-
-### 4.2 Proposed Interface
-
-```python
-class DispatchOptimizer:
-    """Optimal dispatch schedule generation."""
-
-    def __init__(self, config: OptimizerConfig):
-        ...
-
-    def optimize(
-        self,
-        prices: pd.DataFrame,        # Energy prices or tariff signals
-        solar: pd.DataFrame = None,
-        load: pd.DataFrame = None,
-        battery_state: BatteryState = None,  # Current SoC, SoH
-        horizon_hours: int = 24,
-    ) -> DispatchSchedule:
-        ...
-```
-
-### 4.3 Optimization Formulation (Sketch)
-
-<!-- Objective: minimize cost or maximize revenue -->
-<!-- Decision variables: P_ch(t), P_dis(t), SoC(t) -->
-<!-- Constraints: SoC continuity, power limits, SoC bounds, energy balance -->
-<!-- Degradation-aware: throughput limits, DoD penalties -->
-<!-- Solver: cvxpy or Pyomo -->
-
-### 4.4 Use Cases
-
-<!-- BTM: TOU tariff + demand charges + solar + load -->
-<!-- FTM: Wholesale price arbitrage -->
-
----
-
-## 5. Financial Layer (Task 4 — Architecture Only)
-
-### 5.1 Responsibility
-
-Post-processing wrapper that takes simulator + degradation outputs and applies financial assumptions to produce lifetime economics.
-
-### 5.2 Proposed Interface
-
-```python
-class FinancialModel:
-    """Lifetime financial analysis for BESS / solar+BESS."""
-
-    def __init__(self, config: FinancialConfig):
-        ...
-
-    def analyze(
-        self,
-        lifetime_result: LifetimeResult,
-        cost_assumptions: CostAssumptions,
-    ) -> FinancialResult:
-        ...
-```
-
-### 5.3 Key Capabilities (Deferred)
-
-<!-- NPV, IRR, LCOS, LCOE, payback -->
-<!-- Revenue stacking -->
-<!-- Replacement cost modeling -->
-<!-- Rate escalation, discount rate sensitivity -->
-<!-- Actual-vs-predicted financial comparison -->
-
----
-
-## 6. DUET Integration Points
-
-### 6.1 PV Generation Pipeline
+### 4.1 PV Generation Pipeline
 
 <!-- How the BESS module receives solar generation profiles from DUET -->
 <!-- Time-series format alignment -->
 <!-- Resolution matching -->
 
-### 6.2 Model-vs-Actual Extension
+### 4.2 Model-vs-Actual Extension
 
 <!-- How DUET's existing comparison framework extends to storage -->
 <!-- Measured BESS data ingestion (SoC, power, energy) -->
@@ -312,7 +238,7 @@ class FinancialModel:
 
 **Pending:** DUET entity-relationship diagram / data model (requested from Enurgen)
 
-### 6.3 Configuration Management
+### 4.3 Configuration Management
 
 <!-- How battery system configurations are stored and versioned -->
 <!-- Chemistry parameter sets -->
@@ -320,23 +246,23 @@ class FinancialModel:
 
 ---
 
-## 7. Data Contracts
+## 5. Data Contracts
 
-### 7.1 Dispatch Schedule Format
+### 5.1 Dispatch Schedule Format
 
 ```
 timestamp (ISO 8601, tz-aware) | p_cmd_kw (float, + = discharge)
 ```
 
-### 7.2 Simulation Output Format
+### 5.2 Simulation Output Format
 
 <!-- Reference io_spec.md Section 3 -->
 
-### 7.3 Degradation Output Format
+### 5.3 Degradation Output Format
 
 <!-- Reference io_spec.md Section 4 -->
 
-### 7.4 Time-Series Conventions
+### 5.4 Time-Series Conventions
 
 | Convention | Value |
 |-----------|-------|
@@ -347,33 +273,32 @@ timestamp (ISO 8601, tz-aware) | p_cmd_kw (float, + = discharge)
 
 ---
 
-## 8. Configuration Patterns
+## 6. Configuration Patterns
 
-### 8.1 Chemistry Parameterization
+### 6.1 Chemistry Parameterization
 
 <!-- How different chemistries (LFP, NMC) are configured -->
 <!-- Parameter files / config objects -->
 <!-- Extensibility to new chemistries -->
 
-### 8.2 System Topologies
+### 6.2 System Topologies
 
 <!-- Standalone, AC-coupled, DC-coupled -->
 <!-- How topology choice affects simulation flow -->
 
-### 8.3 Use Case Presets
+### 6.3 Use Case Presets
 
 <!-- Common configurations: utility-scale FTM, C&I BTM, residential, hybrid solar+BESS -->
 <!-- Sensible defaults for each -->
 
 ---
 
-## 9. Technology Stack
+## 7. Technology Stack
 
 | Component | Recommendation | Notes |
 |-----------|---------------|-------|
 | Core simulation | numpy, pandas | Performance-critical inner loops in numpy |
 | Degradation | numpy, scipy (rainflow) | Rainflow counting may use `rainflow` package |
-| Optimization (Task 3) | cvxpy | Convex optimization; LP/MILP via CBC or HiGHS |
 | Data serialization | Parquet / CSV | Parquet for large time-series, CSV for config |
 | Configuration | dataclasses + YAML | System configs in YAML, loaded into dataclasses |
 | Testing | pytest | |
@@ -381,7 +306,7 @@ timestamp (ISO 8601, tz-aware) | p_cmd_kw (float, + = discharge)
 
 ---
 
-## 10. Open Questions
+## 8. Open Questions
 
 <!-- Track decisions that need input from Enurgen -->
 

@@ -1,11 +1,11 @@
 # Input/Output Specification & KPI Definitions
 
-**Task 1, Deliverable 2** | Est. 5 hrs
+**Task 1, Deliverable 2** |
 **Status:** Draft
 
 ## Purpose
 
-Define the data the BESS module needs to consume and produce. This specification serves as the contract between the architecture design (Deliverable 3) and the implementation (Tasks 2A/2B). Every input and output defined here should map to a concrete field in the Python API.
+Define the data the BESS module needs to consume and produce. This specification serves as the 'contract' between the architecture design (Deliverable 3) and the implementation (Tasks 2A/2B). Every input and output defined here should map to a concrete field in the Python API.
 
 ---
 
@@ -81,12 +81,10 @@ Data that varies with time, provided as time-series at the simulation resolution
 | Solar generation profile | P_pv(t) | kW | 5min–1hr | DUET PV model | For hybrid/co-located |
 | Site load profile | P_load(t) | kW | 5min–1hr | Measured or modeled | For BTM use cases |
 | Ambient temperature | T_amb(t) | °C | Hourly | Weather data | If temperature effects modeled |
-| Electricity prices | π(t) | $/MWh | 5min–1hr | Market data | For optimizer (Task 3) |
-| Tariff structure | — | — | — | Tariff definition | For BTM optimizer (Task 3) |
 
 ---
 
-## 3. Outputs — Simulation (Task 2A)
+## 3. Outputs — BESS Simulation (Task 2A)
 
 Time-series outputs from the BESS performance simulator.
 
@@ -101,9 +99,6 @@ Time-series outputs from the BESS performance simulator.
 | Energy discharged | E_dis(t) | kWh | Cumulative or per-interval |
 | Inverter losses | P_inv_loss(t) | kW | |
 | Auxiliary consumption | P_aux(t) | kW | |
-| Clipped solar captured (DC-coupled) | P_clip(t) | kW | If applicable |
-| Grid import | P_import(t) | kW | For BTM configurations |
-| Grid export | P_export(t) | kW | For BTM configurations |
 
 ### 3.2 Summary / Aggregated Outputs (per simulation run)
 
