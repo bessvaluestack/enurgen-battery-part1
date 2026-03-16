@@ -1,4 +1,4 @@
-# Input/Output Specification & KPI Definitions
+# Input/Output Specification Definitions
 
 **Task 1, Deliverable 2** |
 **Status:** Draft
@@ -145,42 +145,13 @@ Time-series outputs from the BESS performance simulator.
 
 ---
 
-## 5. Key Performance Indicators (KPIs)
-
-Formally defined KPIs for use across all modules. Each must have an unambiguous calculation method.
-
-### 5.1 Operational KPIs
-
-| KPI | Definition | Unit | Calculation |
-|-----|-----------|------|-------------|
-| Round-trip efficiency (actual) | | % | E_discharged_ac / E_charged_ac × 100 |
-| Capacity utilization | | % | Actual throughput / theoretical max throughput |
-| Equivalent full cycles (annual) | | cycles/yr | Annual throughput / (2 × usable capacity) |
-| State of health | | % | Current usable capacity / nameplate capacity |
-| Degradation rate | | %/yr | Annualized SoH decline |
-| Availability | | % | Hours operational / hours in period |
-| Curtailment captured (DC-coupled) | | MWh | Solar energy stored that would have been clipped |
-
-### 5.2 Financial KPIs (defined here, implemented in Task 4)
-
-| KPI | Definition | Unit | Notes |
-|-----|-----------|------|-------|
-| Levelized Cost of Storage (LCOS) | Total lifecycle cost / total energy discharged | $/MWh | Includes capex, opex, replacement, degradation |
-| Revenue per cycle | | $/cycle | Total revenue / equivalent full cycles |
-| Revenue per kWh throughput | | $/kWh | Total revenue / total energy discharged |
-| Net Present Value (NPV) | | $ | Discounted cash flows over project life |
-| Internal Rate of Return (IRR) | | % | Discount rate at which NPV = 0 |
-| Simple payback period | | years | Time to recover initial investment |
-
----
-
-## 6. Data Resolution & Conventions
+## 5. Data Resolution & Conventions
 
 | Convention | Value | Notes |
 |-----------|-------|-------|
-| Default time resolution | 30 min | Configurable: 5, 15, 30, 60 min |
-| Minimum data length | 1 year (8,760 hrs) | For annual simulation |
+| Default time resolution | 1 min | Configurable: 1, 5, 15, 30, 60 min |
 | Sign convention (power) | Positive = discharge to grid/load | Consistent with generation convention |
-| Sign convention (SoC) | 0% = empty, 100% = full nameplate | Not usable range |
+| Convention (SoC) | 0% = empty, 100% = full nameplate | Not usable range |
+| Convention (SoH) | TBA | Not usable range |
 | Timestamp convention | Start-of-interval | ISO 8601, timezone-aware |
-| Energy vs. power | Energy = power × interval duration | Not trapezoidal integration |
+| Energy vs. power | Energy = average power × interval duration | |
