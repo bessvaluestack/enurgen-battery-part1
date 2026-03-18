@@ -43,6 +43,6 @@ Extend the DUET solar digital twin platform with BESS modeling. Deliverables are
 
 - Dispatch optimization / optimizer engine (future Task 3)
 - Financial post-processing / lifetime economics (future Task 4)
-- Electrochemical cell-level modeling (suggest SAM/PyBaMM integration)
+- Electrochemical cell-level modeling (SAM/PyBaMM integration is worth outlining as a possibility)
 - Multi-site portfolio optimization or VPP dispatch
 - UI/UX development — all deliverables are Python modules with APIs
