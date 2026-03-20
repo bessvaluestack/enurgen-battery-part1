@@ -55,7 +55,8 @@
 - **SOH\_R** — Resistance-based state of health  
 - **SPM** — Single Particle Model  
 - **SPMe** — Single Particle Model with electrolyte  
-- **TMS** — Thermal management system
+- **TMS** — Thermal management system  
+- **√t** — square root of time
 
 ## Document Purpose and Scope
 
@@ -170,8 +171,8 @@ Goals:
 - The minimum battery model: coulomb counting for SOC tracking (`SOC(t+Δt) = SOC(t) − I·Δt / C_usable`)  
 - Voltage model: terminal voltage as a function of OCV(SOC), internal resistance, and current (`V = OCV(SOC) − I·R_internal`)  
 - More complete: Tremblay-Dessaint generalized Shepherd model (SAM's approach) — captures exponential and nominal voltage zones from datasheet  
-- Most complete: DFN/SPMe electrochemical model (PyBaMM) — resolves solid-phase diffusion, Butler-Volmer kinetics, electrolyte transport  
-- The "datasheet-parameterizable" principle: SAM's voltage model parameterized from 6 datasheet values (`V_full, V_exp, V_nom, q_exp, q_nom, R`); DFN needs 30+ characterization parameters  
+- Most complete: DFN/SPMe electrochemical model (PyBaMM) — resolves solid-phase diffusion, Butler-Volmer kinetics, electrolyte transport (see 3.4)  
+- The "datasheet-parameterizable" principle: SAM's voltage model parameterized from 6 datasheet values (`V_full, V_exp, V_nom, q_exp, q_nom, R`); DFN needs 30+ characterization parameters (see 3.4)  
 - Chemistry-specific voltage behavior: LFP flat OCV with hysteresis; NMC monotonically sloped OCV
 
 **References:**
@@ -239,7 +240,7 @@ Goals:
 - Cycle counting for degradation accumulation:  
   - Simple full-equivalent-cycle (FEC) counting: total Ah discharged / nominal capacity — misses partial cycle depth effects  
   - Rainflow counting (Downing-Socie, ASTM E1049): decomposes arbitrary SOC history into individual cycles with specific DoD values; correct approach for variable dispatch profiles (SAM uses this)  
-- Calendar aging accumulation: cumulative time \* f(T, SOC)  
+- Calendar aging accumulation: `cumulative time * f(T, SOC)`  
 - Predicting EOL trajectory: given current degradation state, project when battery will reach 70% or 80% remaining capacity  
 - EOL threshold: configurable (industry uses 70–80%); must match warranty terms
 
@@ -399,20 +400,19 @@ Summary: mechanistic is the minimum complexity level for root-cause diagnostics;
 
 Key design principle for DUET: "all inputs should be derivable from manufacturer datasheets"
 
-- SAM BattWatts is a complete, open-source, hardware-validated system-level BESS simulation pipeline; the reference architecture for DUET  
+- SAM BattWatts is a complete, open-source, hardware-validated system-level BESS simulation pipeline; **could be the reference architecture for DUET, but hails from 2015**  
 - Sub-model pipeline with feedback: Dispatch, Capacity, Voltage, Thermal, Lifetime, Economics  
 - Voltage model (Tremblay-Dessaint): parameterizable from 6 datasheet values; 97.4% DC RTE at moderate C-rates; doesn't handle LFP hysteresis  
 - Thermal model (lumped): single mass, convective to fixed room temperature; trapezoidal solver; feeds capacity modifier table  
 - Capacity model: coulomb counting for Li-ion (simple tank-of-charge)  
-- Lifetime model (BattWatts 2015 version): rainflow counting \+ manufacturer DoD-cycle lookup table; no calendar aging. This is distinct from the later Smith 2017 state-variable degradation model proposed for DUET  
+- Lifetime model (BattWatts 2015 version): rainflow counting \+ manufacturer DoD-cycle lookup table; no calendar aging. This is distinct from the later Smith 2017 state-variable degradation model  
 - Dispatch controller: constraint stack (SOC, switching, current); manual monthly/hourly schedule dispatch  
-- Economics: multi-year simulation with replacement logic; NPV across three scenarios  
-- Validation results: SAM vs. HOMER within 3% (feature-matched); SAM vs. hardware Li-ion \<9% SOC RMSE (dispatch-mode), \<1% SOC RMSE (discharge-only)  
 - Chemistry defaults: NMC, NCA, LFP, LMO, LCO, LMO/LTO — changing chemistry changes parameter defaults, not model equations
 
 **References:**
 
-- DiOrio, N., et al. *Technoeconomic Modeling of Battery Energy Storage in SAM.* NREL/TP-6A20-64641, 2015\. ([PDF](https://www.nrel.gov/docs/fy15osti/64641.pdf))
+- DiOrio, N., et al. *Technoeconomic Modeling of Battery Energy Storage in SAM.* NREL/TP-6A20-64641, 2015\. ([PDF](https://www.nrel.gov/docs/fy15osti/64641.pdf))  
+- Smith, K., et al. *Life Prediction Model for Grid-Connected Li-ion BESS.* NREL/CP-5400-67102, 2017\. ([PDF](https://www.nrel.gov/docs/fy17osti/67102.pdf))
 
 ### 3.6 Commercial Platforms: TWAICE, ACCURE, Zitara
 

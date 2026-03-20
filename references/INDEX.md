@@ -26,8 +26,15 @@ Tracking source materials used for Task 1 deliverables.
 | `Dubarry_2023_J._Electrochem._Soc._170_070503.pdf` | Dubarry et al. (2023) — mechanistic modeling of Li-ion degradation, Electrochemical Society journal paper |
 | `dubarry_2023_mechanistic_modeling_accure_summary.md` | Summary notes on Dubarry 2023 paper in the context of ACCURE's modeling approach |
 | `mechanistic_modeling_in_batteries.md` | Background notes on mechanistic modeling approaches in battery degradation |
-| `ACCURE_Whitepaper_State_of_Charge__1_.pdf` | ACCURE (2024) — whitepaper on SOC inaccuracies in LFP batteries, BMS limitations, cloud-based SOC correction |
+| `ACCURE_Whitepaper_State_of_Charge.pdf` | ACCURE (2024) — whitepaper on SOC inaccuracies in LFP batteries, BMS limitations, cloud-based SOC correction |
 | `accure_2024_soc_lfp_whitepaper_summary.md` | Summary notes on ACCURE SOC whitepaper — LFP OCV flatness, hysteresis, coulomb counting drift, cloud analytics |
+
+## ecm/
+
+| File | Description |
+|---|---|
+| `Fonso2025-Data-Driven_Modeling_of_Li-Ion_Battery_Based_on_the_Manufacturer_Specifications_and_Laboratory_Measurements.pdf` | Di Fonso et al. (2025) — ECM parameterization from manufacturer datasheets and lab measurements; three-tier methodology (datasheet → lab → aging-aware); IEEE Trans. Ind. Appl. |
+| `difonso_2025_ecm_datasheet_lab_summary.md` | Summary notes on Di Fonso 2025 — ECM parameterization workflow, accuracy progression (2.8% → 1.0% → 0.4%), aging-aware parameter evolution, implications for DUET voltage model |
 
 ## enurgen/
 
@@ -35,6 +42,7 @@ Tracking source materials used for Task 1 deliverables.
 |---|---|
 | `ElectricalInterconnection_enurgen_hierarchy.pdf` | DUET logical blocks: cells → strings → blocks → PCS (inverters) → transformers |
 | `solar_plant_hierarchy_annotated.md` | Annotated notes on DUET's solar plant hierarchy and component structure |
+| `DUET_data_points_sparse.csv` | List of DUET's existing parameters for PV plant modeling |
 
 ## pyBAMM/
 

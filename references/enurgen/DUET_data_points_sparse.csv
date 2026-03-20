@@ -1,0 +1,101 @@
+﻿Human-Readable Name,Rename,Domain,Specifier,Unit,Descriptions,Status,Type,Aggregation,System-level,Block-level
+Time Index,dt_index,dt,index,,Timestamp index,existing,int,,y,y
+Time Stamp,dt_timestamp,dt,timestamp,,"Timestamp string with format ""yyyy-mm-dd HH:MM:SS"" (e.g. 2022-12-21 12:26:00)",existing,str,,y,y
+Time Since Installation [h],dt_time_since_install_h,dt,time_since_install,h,Time since Panel Install Date [hours],,,,n,y
+Enviro Temperature Ambient [°C],enviro_temperature_ambient_c,enviro,temperature_ambient,c,Ambient temperature [°C],existing,float,Average (DC-power weighted) to accommodate when we have different meteo files per block,y,y
+Enviro Windspeed [m/s],enviro_windspeed_ms,enviro,windspeed,ms,Windspeed [m/s],new,float,Average (DC-power weighted) to accommodate when we have different meteo files per block,y,y
+Enviro Albedo [0-1],enviro_albedo_ratio,enviro,albedo,ratio,Albedo [0-1],new,float,Average (DC-power weighted) to accommodate when we have different meteo files per block,y,y
+Enviro Sun Azimuth [°],enviro_sun_azimuth_deg,enviro,sun_azimuth,deg,Sun azimuth angle [°],existing,float,Average (DC-power weighted) to accommodate when we have different meteo files per block,y,y
+Enviro Sun Zenith [°],enviro_sun_zenith_deg,enviro,sun_zenith,deg,Sun zenith angle [°],existing,float,Average (DC-power weighted) to accommodate when we have different meteo files per block,y,y
+Enviro Airmass Relative [-],enviro_airmass_relative,enviro,airmass_relative,,Relative airmass [unitless],existing,float,Average (DC-power weighted) to accommodate when we have different meteo files per block,y,y
+Enviro Soiling [0-1],enviro_soiling_ratio,enviro,soiling,ratio,"Array soiling ratio, determining the ratio between the power with soiling to power without soiling [ratio]",existing,,Average (DC-power weighted) to accommodate differing soiling per block,y,y
+Time Since Cleaning [days],dt_time_since_cleaning_days,dt,time_since_cleaning,days,"Time since last cleaning event, used for the Sawtooth soiling method [days]",,,,n,y
+Irradiance GHI [W/m²],irr_ghi_wm2,irr,ghi,wm2,Global horizontal irradiance (GHI) [W/m²],existing,float,Average (DC-power weighted) to accommodate when we have different meteo files per block,y,y
+Irradiance DNI [W/m²],irr_dni_wm2,irr,dni,wm2,Direct normal irradiance (DNI) [W/m²],existing,float,Average (DC-power weighted) to accommodate when we have different meteo files per block,y,y
+Irradiance DHI [W/m²],irr_dhi_wm2,irr,dhi,wm2,Diffuse horizontal irradiance (DHI) [W/m²],existing,float,Average (DC-power weighted) to accommodate when we have different meteo files per block,y,y
+Irradiance POA Front Center [W/m²],irr_poa_front_center_wm2,irr,poa_front_center,wm2,"Plane of array (POA) irradiance on the front face of a central panel, averaged over all tiers [W/m²]",existing,,Average (DC-power weighted) to accommodate when we have different meteo files per block,y,y
+Irradiance POA Rear Center [W/m²],irr_poa_rear_center_wm2,irr,poa_rear_center,wm2,"Plane of array (POA) irradiance on the rear face of a central panel, averaged over all tiers [W/m²]",new,,Average (DC-power weighted) to accommodate when we have different meteo files per block,y,y
+Irradiance POA Front No Losses [W/m²],irr_poa_front_no_loss_wm2,irr,poa_front_no_loss,wm2,"Plane of array (POA) irradiance on the front face, without any losses considered [W/m²]",new,,,y,y
+Irradiance POA Front with Far Shading [W/m²],irr_poa_front_with_far_shading_wm2,irr,poa_front_with_far_shading,wm2,"Plane of array (POA) irradiance on the front face, including far shading (horizon) losses [W/m²]",new,,,y,y
+Irradiance POA Front with Far & Self Shading [W/m²],irr_poa_front_with_self_shading_wm2,irr,poa_front_with_self_shading,wm2,"Plane of array (POA) irradiance on the front face, including far-shading (horizon) and self-shading losses [W/m²]",new,,,y,y
+Irradiance POA Front with Far & Self Shading & IAM [W/m²],irr_poa_front_with_iam_wm2,irr,poa_front_with_iam,wm2,"Plane of array (POA) irradiance on the front face, including far-shading (horizon), self-shading, and incidence-angle modifier losses [W/m²]",new,,,y,y
+Irradiance POA Rear Ground Reflected [W/m²],irr_poa_rear_ground_reflected_wm2,irr,poa_rear_ground_reflected,wm2,Plane of array (POA) irradiance on the rear face from ground reflection [W/m²],new,,,y,y
+Irradiance POA Rear with Ground & Diffuse [W/m²],irr_poa_rear_with_diffuse_wm2,irr,poa_rear_with_diffuse,wm2,Plane of array (POA) irradiance on the rear face from ground reflection and diffuse skydome [W/m²],new,,,y,y
+Irradiance POA Rear with Ground Diffuse & Direct [W/m²],irr_poa_rear_with_direct_wm2,irr,poa_rear_with_direct,wm2,"Plane of array (POA) irradiance on the rear face from ground reflection, diffuse skydome, and direct beam [W/m²]",new,,,y,y
+Irradiance POA Rear with Ground Diffuse Direct & Structure [W/m²],irr_poa_rear_with_structure_wm2,irr,poa_rear_with_structure,wm2,"Plane of array (POA) irradiance on the rear face from ground reflection, diffuse skydome, direct beam, and structure shading [W/m²]",new,,,y,y
+Cell Temperature Average [°C],cell_temperature_average_c,cell,temperature_average,c,"Cell temperature, averaged across the system, for a bifacial system [°C]",new,,,y,y
+Tracker Angle Tilt [°],tracker_angle_tilt_deg,tracker,angle_tilt,deg,"Tracker tilt angle, measured from horizontal, with +90 degrees running parallel to the system azimuth [deg]",,,,n,y
+Tracker Backtracking [boolean],tracker_backtracking_bool,tracker,backtracking,bool,"When tracker is backtracking, this is set to True [boolean]",,,,n,y
+Array DC Power Available [W],array_dc_power_available_w,array_dc,power_available,w,"Nominal power used to compute the Performance Ratio, for a bifacial system (DC) [W]",new,,,y,y
+Array DC MPP Power [W],array_dc_mpp_power_w,array_dc,mpp_power,w,"Array maximum power point power, for a bifacial system (DC) [W]",existing,float,,y,y
+Array DC Power Sum String [W],array_dc_sum_string_powers_w,array_dc,sum_string_powers,w,"Sum of string powers, for a bifacial system (DC) [W]",new,,,y,y
+Array DC Power Sum Cell STC [W],array_dc_sum_cell_powers_stc_w,array_dc,sum_cell_powers_stc,w,"Sum of cell powers at STC temperature, for a bifacial system (DC) [W]",new,,,y,y
+Array DC Power Sum Cell [W],array_dc_sum_cell_powers_w,array_dc,sum_cell_powers,w,"Sum of cell powers, for a bifacial system (DC) [W]",new,,,y,y
+Array DC Power Sum Cell Center [W],array_dc_sum_cell_powers_center_w,array_dc,sum_cell_powers_center,w,"Sum of cell powers, assuming all panels in the array experienced the same illumination conditions as a central panel, for a bifacial system (DC) [W]",new,,,y,y
+Array DC MPP Power with Soiling [W],array_dc_mpp_power_with_soiling_w,array_dc,mpp_power_with_soiling,w,"Array maximum power point power, reduced by soiling, for a bifacial system (DC) [W]",existing,,,y,y
+Array DC Soiling Power Loss [W],array_dc_soiling_power_loss_w,array_dc,soiling_power_loss,w,"Array soiling power loss, for a bifacial system (DC) [W]",existing,,,y,y
+Array DC MPP Power with Soiling & Degradation [W],array_dc_mpp_power_with_degradation_w,array_dc,mpp_power_with_degradation,w,"Array maximum power point power, reduced by soiling and degradation, for a bifacial system (DC) [W]",existing,,,y,y
+Array DC Degradation Power Loss [W],array_dc_degradation_power_loss_w,array_dc,degradation_power_loss,w,"Array panel degradation power loss, for a bifacial system (DC) [W]",existing,,,y,y
+Array DC Degradation Loss Year1 [W],array_dc_degradation_loss_year_1_w,array_dc,degradation_loss_year_1,w,"Array panel degradation power loss due to first-year degradation rate, for a bifacial system (DC) [W]",existing,,,y,y
+Array DC Degradation Loss Years Remaining [W],array_dc_degradation_loss_years_remaining_w,array_dc,degradation_loss_years_remaining,w,"Array panel degradation power loss due to remaining-years degradation rate, for a bifacial system (DC) [W]",existing,,,y,y
+Array DC MPP Voltage [V],array_dc_mpp_voltage_v,array_dc,mpp_voltage,v,"Array maximum power point voltage, for a bifacial system (DC) [W]",,,,n,y
+Array DC Mismatch String-to-Array [0-1],array_dc_mismatch_string_to_array,array_dc,mismatch_string_to_array,ratio,"Electrical mismatch between the string and array, calculated as the ratio of array max power to sum of string max powers, for a bifacial system (DC) [ratio]",,,,n,y
+Array DC Mismatch Panel-to-Array [0-1],array_dc_mismatch_panel_to_array,array_dc,mismatch_panel_to_array,ratio,"Electrical mismatch between the panel and array, calculated as the ratio of array max power to sum of panel max powers, for a bifacial system (DC) [ratio]",,,,n,y
+Array DC Mismatch Cell-to-Array [0-1],array_dc_mismatch_cell_to_array,array_dc,mismatch_cell_to_array,ratio,"Electrical mismatch between the string and array, calculated as the ratio of array max power to sum of cell max powers, for a bifacial system (DC) [ratio]",,,,n,y
+Line DC1 Current [A],line_dc1_current_a,line_dc1,current,a,"DC line 1 current, for a bifacial system (DC) [A]",,,,y,y
+Line DC1 Power Out [W],line_dc1_power_out_w,line_dc1,power_out,w,"DC line 1 transmitted power output, for a bifacial system (DC) [W]",existing,,,y,y
+Line DC1 Power Loss [W],line_dc1_power_loss_w,line_dc1,power_loss,w,"DC line 1 power loss, for a bifacial system (DC) [W]",existing,,,y,y
+Line DC1 Voltage Out [V],line_dc1_voltage_out_v,line_dc1,voltage_out,v,"DC line 1 transmitted voltage output, for a bifacial system (DC) [V]",,,,n,y
+Line DC1 Voltage Drop [V],line_dc1_voltage_drop_v,line_dc1,voltage_drop,v,"DC line 1 voltage drop from input to output, for a bifacial system (DC) [V]",,,,n,y
+Line DC1 Transmission Efficiency [0-1],line_dc1_transmission_efficiency_ratio,line_dc1,transmission_efficiency,ratio,"DC line 1 power transmission efficiency, for a bifacial system (DC) [ratio]",existing,,Recalculate with system numbers: dc_line_power_out_w_bi / dc_array_mpp_power_with_degradation_w_bi,y,y
+Inverter Power Loss Total [W],inverter_loss_total_w,inverter,loss_total,w,"Inverter total power loss, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss Consumption [W],inverter_loss_consumption_w,inverter,loss_consumption,w,"Inverter self-consumption loss, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss AC Clipping [W],inverter_loss_ac_clipping_w,inverter,loss_ac_clipping,w,"Inverter AC clipping loss, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss Night Tare [W],inverter_loss_night_tare_w,inverter,loss_night_tare,w,"Inverter night consumption loss, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss DC Voltage-Under [W],inverter_loss_dc_voltage_under_w,inverter,loss_dc_voltage_under,w,"Inverter loss due to operation under the minimum DC voltage limit, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss DC Voltage-Over [W],inverter_loss_dc_voltage_over_w,inverter,loss_dc_voltage_over,w,"Inverter loss due to operation over the maximum DC voltage limit, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss DC Power-Under [W],inverter_loss_dc_power_under_w,inverter,loss_dc_power_under,w,"Inverter loss due to operation under the minimum DC power limit, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss DC Power-Over [W],inverter_loss_dc_power_over_w,inverter,loss_dc_power_over,w,"Inverter loss due to operation over the maximum DC power limit, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss DC Current-Over [W],inverter_loss_dc_current_over_w,inverter,loss_dc_current_over,w,"Inverter loss due to operation over the maximum DC current limit, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss Temperature-Under [W],inverter_loss_temperature_under_w,inverter,loss_temperature_under,w,"Inverter loss due to operation under the minimum temperature limit, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss Temperature-Over [W],inverter_loss_temperature_over_w,inverter,loss_temperature_over,w,"Inverter loss due to operation over the maximum temperature limit, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss Temperature-Curve [W],inverter_loss_temperature_curve_w,inverter,loss_temperature_curve,w,"Inverter loss due to its temperature performance curve, for a bifacial system [W]",existing,,,y,y
+Inverter Power Loss Powerfactor [W],inverter_loss_powerfactor_w,inverter,loss_powerfactor,w,"Inverter loss due to powerfactor, for a bifacial system [W]",existing,,,y,y
+Inverter Current AC Out [A],inverter_current_ac_out_a,inverter,current_ac_out,a,"Inverter current output, for a bifacial system (AC) [A]",,,,y,y
+Inverter Power AC Out [W],inverter_power_ac_out_w,inverter,power_ac_out,w,"Inverter power output, for a bifacial system (AC) [W]",existing,,,y,y
+Inverter Efficiency [0-1],inverter_efficiency_ratio,inverter,efficiency,ratio,"Inverter efficiency, for a bifacial system (DC to AC) [ratio]",existing,,Recalculate with system numbers: inverter_power_ac_out_w_bi / dc_line1_power_out_w_bi,y,y
+Inverter Power AC Out STC [W],inverter_power_ac_out_stc_w,inverter,power_ac_out_stc,w,"Inverter power output at STC temperature, for a bifacial system (AC) [W]",new,,,y,y
+Transformer MV Power Out [W],transformer_mv_power_out_w,transformer_mv,power_out,w,"MV transformer power output, for a bifacial system (AC) [W]",existing,,,y,y
+Transformer MV Efficiency [0-1],transformer_mv_efficiency_ratio,transformer_mv,efficiency,ratio,"MV transformer efficiency, for a bifacial system (AC to AC) [ratio]",existing,,Recalculate with system numbers: transformer_mv_power_out_w_bi / inverter_power_ac_out_w_bi,y,y
+Transformer MV Power Loss Total [W],transformer_mv_loss_total_w,transformer_mv,loss_total,w,"MV transformer total power loss, for a bifacial system (AC) [W]",existing,,,y,y
+Transformer MV Power Loss Iron [W],transformer_mv_loss_iron_w,transformer_mv,loss_iron,w,"MV transformer iron power loss, for a bifacial system (AC) [W]",existing,,,y,y
+Transformer MV Power Loss Copper [W],transformer_mv_loss_copper_w,transformer_mv,loss_copper,w,"MV transformer copper power loss, for a bifacial system (AC) [W]",existing,,,y,y
+Line MV Current [A],line_mv_current_a,line_mv,current,a,"MV line current, for a bifacial system (AC) [A]",new,,,y,y
+Line MV Power Out [W],line_mv_power_out_w,line_mv,power_out,w,"MV line power output, for a bifacial system (AC) [W]",existing,,,y,y
+Line MV Power Loss [W],line_mv_power_loss_w,line_mv,power_loss,w,"MV line total power loss, for a bifacial system (AC) [W]",existing,,,y,y
+Line MV Voltage Out [V],line_mv_voltage_out_v,line_mv,voltage_out,v,"MV line voltage output, for a bifacial system (AC) [V]",new,,,n,y
+Line MV Voltage Drop [V],line_mv_voltage_drop_v,line_mv,voltage_drop,v,"MV line voltage drop, for a bifacial system (AC) [V]",new,,Calculate as: transformer_mv_voltage_out_v - mv_line_voltage_out_v_bi,n,y
+Line MV Transmission Efficiency [0-1],line_mv_transmission_efficiency_ratio,line_mv,transmission_efficiency,ratio,"MV line transmission efficiency, for a bifacial system (AC) [ratio]",existing,,Recalculate with system numbers: ac_line2_power_out_w_bi / transformer_mv_power_out_w_bi,y,y
+Transformer HV Power Out [W],transformer_hv_power_out_w,transformer_hv,power_out,w,"HV transformer power output, for a bifacial system (AC) [W]",new,,,y,n
+Transformer HV Efficiency [0-1],transformer_hv_efficiency_ratio,transformer_hv,efficiency,ratio,"HV transformer efficiency, for a bifacial system (AC to AC) [ratio]",new,,,y,n
+Transformer HV Loss Total [W],transformer_hv_loss_total_w,transformer_hv,loss_total,w,"HV transformer total power loss, for a bifacial system (AC) [W]",new,,,y,n
+Transformer HV Loss Iron [W],transformer_hv_loss_iron_w,transformer_hv,loss_iron,w,"HV transformer iron power loss, for a bifacial system (AC) [W]",new,,,y,n
+Transformer HV Loss Copper [W],transformer_hv_loss_copper_w,transformer_hv,loss_copper,w,"HV transformer copper power loss, for a bifacial system (AC) [W]",new,,,y,n
+Line HV Current [A],line_hv_current_a,line_hv,current,a,"HV line current, for a bifacial system (AC) [A]",new,,,y,n
+Line HV Power Out [W],line_hv_power_out_w,line_hv,power_out,w,"HV line power output, for a bifacial system (AC) [W]",new,,,y,n
+Line HV Power Loss [W],line_hv_power_loss_w,line_hv,power_loss,w,"HV line total power loss, for a bifacial system (AC) [W]",new,,,y,n
+Line HV Voltage Out [V],line_hv_voltage_out_v,line_hv,voltage_out,v,"HV line voltage output, for a bifacial system (AC) [V]",new,,,y,n
+Line HV Voltage Drop [V],line_hv_voltage_drop_v,line_hv,voltage_drop,v,"HV line voltage drop, for a bifacial system (AC) [V]",new,,,y,n
+Line HV Transmission Efficiency [0-1],line_hv_transmission_efficiency_ratio,line_hv,transmission_efficiency,ratio,"HV line transmission efficiency, for a bifacial system (AC) [ratio]",new,,,y,n
+Grid Injection Power [W],grid_injection_power_w,grid,injection_power,w,"Grid injection power, for a bifacial system (AC) [W]",new,,,y,n
+Panel MPP Power STC [W],panel_mpp_power_stc_w,panel,mpp_power_stc,w,Power rating of a single panel operating under standard test conditions (STC) [W],existing,,Average (DC-power weighted) to accommodate differing panels per block,y,y
+Panels In Array [count],panel_number_in_array,panel,number_in_array,,Number of panels in the array,existing,,Sum,y,y
+Panel Area [m²],panel_area_m2,panel,area,m2,Area of an individual panel [m²],new,,Average (DC-power weighted) to accommodate differing panels per block,y,y
+Panel Bifaciality Current Ratio [0-1],panel_bifaciality_current_ratio,panel,bifaciality_current,ratio,Bifaciality current ratio,new,,Average (DC-power weighted) to accommodate differing panels per block,y,y
+Time Step [min],dt_timestep_minutes,dt,timestep,minutes,Time interval between timestamps [minutes],new,,,y,y
+Inverter LV Voltage Out [V],inverter_lv_voltage_out_v,inverter,lv_voltage_out,v,Inverter voltage output (AC) [V],,,,n,y
+Transformer MV Voltage Out [V],transformer_mv_voltage_out_v,transformer_mv,voltage_out,v,MV transformer voltage output (AC) [V],,,,n,y
+Transformer HV Voltage Out [V],transformer_hv_voltage_out_v,transformer_hv,voltage_out,v,HV transformer voltage output (AC) [V],new,,,y,n
+Line DC1 Resistance [Ω],line_dc1_resistance_ohm,line_dc1,resistance,ohm,DC line 1 resistance [Ω],,,,n,y
+Line MV Resistance [Ω],line_mv_resistance_ohm,line_mv,resistance,ohm,MV line  resistance [Ω],,,,n,y
+Line HV Resistance [Ω],line_hv_resistance_ohm,line_hv,resistance,ohm,HV line  resistance [Ω],new,,,y,
