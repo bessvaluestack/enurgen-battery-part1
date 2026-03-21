@@ -1,66 +1,6 @@
 # BESS Modeling Landscape Survey + Architecture Recommendations
 
 **Task 1, Deliverable 1** | Status: Outline+Summary
-**Audience:** Enurgen engineering team
-**Feeds into:** `io_spec/io_spec.md`, `architecture/architecture.md`
-
----
-
-## Glossary
-
-- **Ah** — Ampere-hour
-- **ASTM** — ASTM International
-- **BESS** — Battery Energy Storage System
-- **BMS** — Battery Management System
-- **BoL** — Beginning of Life
-- **C-rate** — Charge/discharge rate normalized by nominal capacity
-- **CAOM / CYAOM / CCYASM / CCYACM** — Taxonomy labels used in the cited battery aging literature for classes of empirical and semi-empirical aging models
-- **Cp** — Specific heat capacity
-- **DCR** — Direct current resistance
-- **DoD** — Depth of discharge
-- **EKF** — Extended Kalman Filter
-- **EMS** — Energy Management System
-- **EOL** — End of life
-- **EPC** — Engineering, Procurement, and Construction
-- **FEC** — Full equivalent cycles
-- **DFN / P2D** — Doyle-Fuller-Newman / pseudo-two-dimensional electrochemical model
-- **HPPC** — Hybrid Pulse Power Characterization
-- **I/O** — Input/output
-- **LAM** — Loss of active material
-- **LAM_NE** — Loss of active material in the negative electrode
-- **LAM_PE** — Loss of active material in the positive electrode
-- **LCO** — Lithium cobalt oxide
-- **LFP** — Lithium iron phosphate
-- **Li plating** — Metallic lithium plating on the anode during charge under adverse conditions
-- **LLI** — Loss of lithium inventory
-- **LMO** — Lithium manganese oxide
-- **LTO** — Lithium titanate
-- **ML** — Machine learning
-- **MV** — Medium voltage
-- **NCA** — Nickel cobalt aluminum oxide
-- **NMC** — Nickel manganese cobalt oxide
-- **NPV** — Net present value
-- **OCV** — Open-circuit voltage
-- **ODE** — Ordinary differential equation
-- **PCS** — Power conversion system
-- **PDE** — Partial differential equation
-- **PyBaMM** — Python Battery Mathematical Modelling
-- **Q_neg / Q_pos / Q_Li** — State variables in the NREL semi-empirical model representing negative-electrode capacity, positive-electrode capacity, and lithium inventory related capacity
-- **R** — Resistance
-- **RES** — Renewable energy system(s)
-- **RMSE** — Root mean square error
-- **RTE** — Round-trip efficiency
-- **SAM** — System Advisor Model
-- **SEI** — Solid electrolyte interphase
-- **SOC** — State of charge
-- **SOH** — State of health
-- **SOH_C** — Capacity-based state of health
-- **SOH_R** — Resistance-based state of health
-- **SPM** — Single Particle Model
-- **SPMe** — Single Particle Model with electrolyte
-- **TMS** — Thermal management system
-
----
 
 ## Document Purpose and Scope
 
@@ -68,16 +8,12 @@ This document provides (1) a technical primer on Li-ion BESS physics and system 
 
 Goals:
 
-1. Provide a shared technical frame of reference before architecture design and implementation begin.
-2. Outline and choose which modeling choices are appropriate for DUET's BESS PoC.
-
----
+1. Provide a shared technical frame of reference before more refined architecture design and implementation begin.
+2. Outline and present appropriate modeling choices for DUET's BESS PoC.
 
 ## 1. Li-ion BESS Primer: Physics, Components, and System Architecture
 
 **Purpose of this section:** Ground-level technical context. Establishes terminology and physical intuitions that the rest of the document assumes.
-
----
 
 ### 1.1 Cell Electrochemistry Fundamentals
 
@@ -91,17 +27,15 @@ Goals:
 **Reference sources:**
 
 - `nrel_64171_degradation_mechanisms_summary.md` — mechanism taxonomy, SEI growth dominance argument, √t trajectory
-- `zitara_lithium_ion_battery_degradation.md` — accessible primer on degradation causes and effects
+- `zitara_lithium_ion_battery_degradation.md` — Zitara's approach and positioning
 - `dubarry_2023_mechanistic_modeling_accure_summary.md` — three-mode (LLI/LAM) framework introduction
 
----
+### 1.2 BESS System Hierarchy: Cell to POC
 
-### 1.2 BESS System Hierarchy: Cell to Grid
-
-- Physical hierarchy: Cell -> Module -> String -> Rack/Block -> PCS (bidirectional inverter) -> MV transformer -> HV transformer -> grid connection
+- Physical hierarchy: Cell -> Module -> String -> Rack/Block -> PCS (bidirectional inverter) -> MV transformer -> HV transformer -> POC
 - Electrical rules: series connections add voltage; parallel connections add current capacity
 - Annotated diagram of a utility-scale BESS container showing hierarchy levels
-- Map to Enurgen's existing DUET solar hierarchy (Panel->String->Block->System) — show the analogy and highlight BESS-specific differences:
+- Maps to Enurgen's existing DUET solar hierarchy (Panel->String->Block->System). BESS-specific differences:
   - PCS is bidirectional (vs. unidirectional solar inverter)
   - BMS layer sits across all BESS levels (no PV equivalent)
   - BESS has internal state (SOC, SOH) that PV panels do not
@@ -112,8 +46,6 @@ Goals:
 
 - `solar_plant_hierarchy_annotated.md` — Enurgen's existing DUET hierarchy as the analog
 - `nrel_64641_sam_technoeconomic_summary.md` — SAM's cells-in-series/parallel bank model and AC-coupled architecture
-
----
 
 ### 1.3 Energy Conversion Chain and Efficiency Budget
 
@@ -130,8 +62,6 @@ Goals:
 **Reference sources:**
 
 - `nrel_64641_sam_technoeconomic_summary.md` — voltage model, PCS efficiency model
-
----
 
 ### 1.4 Li-ion Chemistries for Grid-Scale BESS
 
@@ -154,8 +84,6 @@ Goals:
 - `nrel_67102_life_prediction_summary.md` — NMC/graphite parameterized model; notes on chemistry-specificity
 - `gwayi_2025_empirical_aging_models_review_summary.md` — 19 calendar + 20 cycle aging studies; LFP vs. NMC coverage
 
----
-
 ### 1.5 Degradation: The High-Level Picture
 
 - The two observable outcomes of degradation: (1) capacity fade — battery stores less energy; (2) resistance growth — battery delivers/accepts less power and generates more heat
@@ -177,31 +105,27 @@ Goals:
 
 - `nrel_64171_degradation_mechanisms_summary.md` — mechanism taxonomy, SEI dominance, √t trajectory, coupling hypotheses
 - `nrel_67102_life_prediction_summary.md` — oversizing vs. thermal management tradeoff
-- `zitara_lithium_ion_battery_degradation.md` — six causes of degradation (accessible framing)
-
----
+- `zitara_lithium_ion_battery_degradation.md` — Zitara's approach and positioning
 
 ## 2. What BESS Models Should Implement: A Functional Requirements Catalog
 
 **Purpose of this section:** Define the complete set of functional building blocks that any serious BESS simulation or digital twin tool must address — independent of any specific implementation. This serves as the evaluation framework for Section 3's degradation model comparison and as the specification basis for DUET BESS PoC module design in Section 4.
-
----
 
 ### 2.1 Electrochemical Core: Capacity and Voltage Model
 
 - The minimum battery model: coulomb counting for SOC tracking (`SOC(t+Δt) = SOC(t) − I·Δt / C_usable`)
 - Voltage model: terminal voltage as a function of OCV(SOC), internal resistance, and current (`V = OCV(SOC) − I·R_internal`)
 - More complete: Tremblay-Dessaint generalized Shepherd model (SAM's approach) — captures exponential and nominal voltage zones from datasheet
-- Most complete: DFN/SPMe electrochemical model (PyBaMM) — resolves solid-phase diffusion, Butler-Volmer kinetics, electrolyte transport
-- The "datasheet-parameterizable" principle: SAM's voltage model parameterized from 6 datasheet values (`V_full, V_exp, V_nom, q_exp, q_nom, R`); DFN needs 30+ characterization parameters
+- Alternative: Equivalent Circuit Model (ECM) with N RC branches — captures transient dynamics (charge-transfer, diffusion) in addition to steady-state OCV and Ohmic resistance. The aging-aware ECM variant parameterizes OCV, R₀, and RC elements as functions of SOC, temperature, *and SOH* — enabling the voltage model to track how electrical behavior changes as the battery degrades
+- Most complete: DFN/SPMe electrochemical model (PyBaMM) — resolves solid-phase diffusion, Butler-Volmer kinetics, electrolyte transport (see 3.4)
+- The "datasheet-parameterizable" principle: SAM's 2015 voltage model parameterized from 6 datasheet values (`V_full, V_exp, V_nom, q_exp, q_nom, R`); DFN needs 30+ characterization parameters (see 3.4)
 - Chemistry-specific voltage behavior: LFP flat OCV with hysteresis; NMC monotonically sloped OCV
 
 **Reference sources:**
 
 - `nrel_64641_sam_technoeconomic_summary.md` — Tremblay-Dessaint model, datasheet parameter extraction
 - `pybamm_continuum_models_liiondb_summary.md` — DFN model structure
-
----
+- Di Fonso, R., et al. *Data-Driven Modeling of Li-Ion Battery.* IEEE Trans. Ind. Appl., Vol. 61, No. 2, 2025. — ECM parameterization from datasheets; three-tier methodology (external reference, no internal summary)
 
 ### 2.2 Thermal Model
 
@@ -219,8 +143,6 @@ Goals:
 
 - `nrel_64641_sam_technoeconomic_summary.md` — lumped thermal model equations, trapezoidal solver
 - `nrel_67102_life_prediction_summary.md` — temperature effects on degradation (thermal management impact)
-
----
 
 ### 2.3 Degradation / Aging Model
 
@@ -244,8 +166,6 @@ Goals:
 - `gwayi_2025_empirical_aging_models_review_summary.md` — 13-model catalog, 46% resistance gap finding
 - `dubarry_2023_mechanistic_modeling_accure_summary.md` — 4-tier taxonomy
 
----
-
 ### 2.4 State of Charge (SOC) Estimation
 
 - SOC as the central operational state variable: everything depends on it — dispatch decisions, degradation rates, power capability estimates, financial projections
@@ -261,15 +181,13 @@ Goals:
 
 - `accure_2024_soc_lfp_whitepaper_summary.md` — primary reference; complete treatment of LFP SOC problem, BMS tiers, cloud analytics
 
----
-
 ### 2.5 State of Health (SOH) Tracking and Lifetime Prediction
 
 - SOH definitions: SOH_C (capacity relative to BoL: `C_current / C_BoL`) and SOH_R (resistance relative to BoL: `R_current / R_BoL`) — why a single SOH number is insufficient; the two metrics tell different stories
 - Cycle counting for degradation accumulation:
   - Simple full-equivalent-cycle (FEC) counting: total Ah discharged / nominal capacity — misses partial cycle depth effects
   - Rainflow counting (Downing-Socie, ASTM E1049): decomposes arbitrary SOC history into individual cycles with specific DoD values; correct approach for variable dispatch profiles (SAM uses this)
-- Calendar aging accumulation: cumulative time × f(T, SOC)
+- Calendar aging accumulation: `cumulative time * f(T, SOC)`
 - Predicting EOL trajectory: given current degradation state, project when battery will reach 70% or 80% remaining capacity
 - EOL threshold: configurable (industry uses 70–80%); must match warranty terms
 
@@ -277,8 +195,6 @@ Goals:
 
 - `nrel_64641_sam_technoeconomic_summary.md` — rainflow counting methodology, SAM lookup table lifetime model, EOL threshold
 - `nrel_67102_life_prediction_summary.md` — state-variable model for EOL projection; 70% capacity threshold in paper
-
----
 
 ### 2.6 Dispatch Interface and Physical Constraint Enforcement
 
@@ -296,8 +212,6 @@ Goals:
 
 - `nrel_64641_sam_technoeconomic_summary.md` — dispatch algorithm logic, constraint controller stack
 
----
-
 ### 2.7 System Hierarchy Aggregation
 
 - From cell-level physics to system-level behavior
@@ -313,8 +227,6 @@ Goals:
 **Reference sources:**
 
 - `nrel_64641_sam_technoeconomic_summary.md` — cells-in-series/parallel bank model
-
----
 
 ### 2.8 Model-vs-Actual Comparison Layer
 
@@ -334,13 +246,9 @@ Goals:
 
 - `accure_2024_soc_lfp_whitepaper_summary.md` — BMS SOC vs. corrected SOC as the comparison layer
 
----
-
 ## 3. Degradation Modeling Approaches: Review and Comparison
 
 **Purpose of this section:** Review the full modeling landscape (both for degradation and for energy flow simulation) comparing models, approaches and tools.
-
----
 
 ### 3.1 The Four-Tier Degradation Modeling Spectrum
 
@@ -351,19 +259,24 @@ Goals:
 | Mechanistic | ACCURE / Dubarry 2023 | LLI, LAM_NE, LAM_PE from voltage curves | Half-cell OCV data + full-cell cycling | Electrode-level — *which* mode dominates |
 | Physical-chemical | PyBaMM DFN, SPMe, SPM | Full electrochemical state | 30+ physical parameters (DFN characterization) | Mechanism-level — *why* degradation occurs |
 
-- Key insight: mechanistic models are the minimum complexity level that provides electrode-level diagnostic decomposition; semi-empirical models track aggregate health but cannot attribute fade to a specific electrode
-- No tier is universally superior: right choice depends on data available, required fidelity, and computational context (real-time BMS vs. cloud simulation vs. validation)
-- Spectrum diagram showing the models positioned on the spectrum
+**Forward prediction vs. diagnostic decomposition.** The four tiers above differ not only in fidelity but in *what kind of question they answer*. This is a critical distinction for DUET's architecture:
+
+- **Forward predictive models** (empirical and semi-empirical): answer *"given this operating profile, how much will the battery degrade?"* They take operating conditions as inputs (T, SOC, DoD, time, cycle count) and output predicted degradation (remaining capacity, resistance growth). These are the models that run inside a simulation engine. DUET's core degradation module (Task 2B) is a forward model.
+- **Diagnostic decomposition tools** (mechanistic and physics-based): answer *"given this measured voltage curve, which electrode is degrading and by which mode?"* They take measured data as input (full-cell charge/discharge voltage curves, or full electrochemical characterization) and output a decomposition of what has already happened (LLI%, LAM_NE%, LAM_PE%, or spatially-resolved electrochemical state). These are not simulation engines — they are analysis techniques applied to operational or test data.
+
+**These two categories are complementary, not interchangeable.** A mechanistic model like Dubarry 2023 tells you *what happened* (electrode-level diagnosis from measured curves). A semi-empirical model like NREL Smith 2017 tells you *what will happen* (forward prediction from operating conditions). To use a mechanistic decomposition as a forward model, you would need to add rate equations on top — "LLI grows at rate X as a function of T and SOC, LAM_NE grows at rate Y as a function of DoD and T" — which brings you back to something structurally similar to the NREL semi-empirical model, just expressed in different state variables (LLI/LAM instead of Q_Li/Q_neg).
+
+For DUET, the practical implication is: the simulation engine uses forward models (Sections 3.2, 3.2.1). Mechanistic and physics-based approaches (Sections 3.3, 3.4) serve as diagnostic and validation tools that operate on measured data — they are relevant to DUET's model-vs-actual comparison layer, not to the forward simulation loop.
 
 **Reference sources:**
 
 - `dubarry_2023_mechanistic_modeling_accure_summary.md` — 4-tier table (primary)
-- `mechanistic_modeling_in_batteries.md` — ACCURE blog explanation of tiers
+- `mechanistic_modeling_in_batteries.md` — ACCURE's plain-language positioning statement
 - `pybamm_continuum_models_liiondb_summary.md` — full spectrum summary table with DUET roles
 
----
+### 3.2 Empirical and Semi-Empirical Models (Forward Predictive)
 
-### 3.2 Empirical and Semi-Empirical Models
+These are **forward predictive models**: given operating conditions (T, SOC, DoD, C-rate, time), they predict how much the battery will degrade. They are the class of model suitable for DUET's simulation engine.
 
 - The CAOM/CYAOM/CCYASM/CCYACM taxonomy with model counts per category
 - Summary table of all 13 models: code, type, complexity score, C-rate sensitivity, capacity fade, resistance increase, chemistry
@@ -382,6 +295,7 @@ Goals:
 #### 3.2.1 The NREL Semi-Empirical Model (Smith et al. 2017)
 
 - Context: a later NREL state-variable degradation model and the reference implementation for DUET Task 2B. It is conceptually aligned with the NREL/SAM lineage, but distinct from BattWatts' original 2015 lookup-table lifetime model described in Section 3.5
+- **Methodology: forward predictive.** Given operating conditions (T, SOC, DoD, time, cycle count), it predicts remaining capacity and resistance. It can be time-stepped through arbitrary dispatch profiles — this is what makes it usable as DUET's core simulation engine.
 - Experimental basis: 11 Kokam 75-Ah NMC/graphite cells, 9 conditions (0°C to 55°C); cycling and storage tests
 - Capacity model: three competing mechanisms, `Q = min(Q_Li, Q_neg, Q_pos)`:
   - Q_Li: lithium loss from calendar SEI (√t), cycling-driven SEI cracking (×N), break-in (saturating exponential)
@@ -398,11 +312,9 @@ Goals:
 - `nrel_67102_life_prediction_summary.md` — primary; full parameter catalog, model equations, validation results
 - `nrel_64171_degradation_mechanisms_summary.md` — theoretical foundation; competing-mechanism coupling choice; SEI dominance argument
 
----
+### 3.3 Mechanistic Modeling: LLI/LAM Decomposition (Diagnostic)
 
-### 3.3 Mechanistic Modeling: LLI/LAM Decomposition
-
-Summary: mechanistic is the minimum complexity level for root-cause diagnostics; positioned as "compromise" between semi-empirical and physics-based.
+**Methodology: diagnostic decomposition, not forward prediction.** Mechanistic models analyze measured voltage curves to determine *what has already happened* at the electrode level. They do not predict future degradation from operating conditions — they decompose observed degradation from measured data. This is the minimum complexity level for root-cause diagnostics; positioned as "compromise" between semi-empirical and physics-based.
 
 - What mechanistic models do that semi-empirical models cannot: attribute observed degradation to a specific electrode and a specific degradation mode
 - Core principle: full-cell voltage = `V_PE(Q) − V_NE(Q)`; by adjusting how electrode curves are aligned/scaled, the model emulates LLI/LAM_NE/LAM_PE effects on the observable voltage profile
@@ -410,16 +322,17 @@ Summary: mechanistic is the minimum complexity level for root-cause diagnostics;
 - The inaccessible lithium correction (Dubarry 2023): layered oxide cathodes (NMC, NCA, LCO) are never fully delithiated at normal cutoffs; models that ignore this systematically overestimate LLI and underestimate LAM_PE; the correction equations
 - ACCURE's production use: non-invasive electrode-level diagnostics from operational charge/discharge voltage data (SCADA already collects this)
 - LLI/LAM ratio as safety indicator: acceleration in this ratio is a leading indicator for the capacity "knee" and potential unsafe events
-- Mapping to NREL model: LLI <-> Q_Li, LAM_NE <-> Q_neg, LAM_PE not in NREL
+- Mapping to NREL forward model states: LLI <-> Q_Li, LAM_NE <-> Q_neg, LAM_PE not in NREL. The state variables describe the same physical phenomena but from opposite directions — the NREL model *predicts* Q_Li fade from operating conditions; the mechanistic model *measures* LLI from voltage curves
+- **Bridging diagnostic to predictive:** To use mechanistic decomposition as a forward model, rate equations would need to be added (e.g., "LLI grows at rate f(T, SOC) per unit time"). This brings the model structurally close to the NREL semi-empirical approach, just expressed in LLI/LAM state variables rather than Q_Li/Q_neg. This is a possible future extension but not part of the PoC.
 
 **Reference sources:**
 
 - `dubarry_2023_mechanistic_modeling_accure_summary.md` — primary; model framework, inaccessible lithium problem, correction equations, mapping to NREL states
 - `mechanistic_modeling_in_batteries.md` — ACCURE's plain-language positioning statement
 
----
+### 3.4 Physics-Based Models: PyBaMM and the DFN Hierarchy (Diagnostic / Validation)
 
-### 3.4 Physics-Based Models: PyBaMM and the DFN Hierarchy
+**Methodology: primarily diagnostic and validation for DUET's purposes.** Physics-based models can in principle run forward simulations (predicting voltage, temperature, and degradation for a given current profile), but their computational cost and parameterization burden make them impractical as DUET's production simulation engine. Their value for DUET is as a validation reference and sensitivity analysis tool.
 
 - The DFN (Doyle-Fuller-Newman) framework as the canonical continuum model: three regions (NE, separator, PE), particle-scale diffusion coupled through electrode thickness
 - Three fidelity tiers in PyBaMM:
@@ -437,31 +350,26 @@ Summary: mechanistic is the minimum complexity level for root-cause diagnostics;
 
 **Reference sources:**
 
-- `pybamm_continuum_models_liiondb_summary.md` — primary; model hierarchy, degradation options, SWOT, interface contract concept
+- `pybamm_continuum_models_liiondb_summary.md` — primary; model hierarchy, degradation options, SWOT, interface contract concept, interface contract concept, spectrum table
 - `dubarry_2023_mechanistic_modeling_accure_summary.md` — positioning PyBaMM in tier 4
-
----
 
 ### 3.5 Energy Flow and System-Level Simulation: SAM BattWatts Architecture
 
 Key design principle for DUET: "all inputs should be derivable from manufacturer datasheets"
 
-- SAM BattWatts is a complete, open-source, hardware-validated system-level BESS simulation pipeline; the reference architecture for DUET
+- SAM BattWatts is a complete, open-source, hardware-validated system-level BESS simulation pipeline; **could be the reference architecture for DUET, but hails from 2015**
 - Sub-model pipeline with feedback: Dispatch, Capacity, Voltage, Thermal, Lifetime, Economics
 - Voltage model (Tremblay-Dessaint): parameterizable from 6 datasheet values; 97.4% DC RTE at moderate C-rates; doesn't handle LFP hysteresis
 - Thermal model (lumped): single mass, convective to fixed room temperature; trapezoidal solver; feeds capacity modifier table
 - Capacity model: coulomb counting for Li-ion (simple tank-of-charge)
-- Lifetime model (BattWatts 2015 version): rainflow counting + manufacturer DoD-cycle lookup table; no calendar aging. This is distinct from the later Smith 2017 state-variable degradation model proposed for DUET
+- Lifetime model (BattWatts 2015 version): rainflow counting + manufacturer DoD-cycle lookup table; no calendar aging. This is distinct from the later Smith 2017 state-variable degradation model
 - Dispatch controller: constraint stack (SOC, switching, current); manual monthly/hourly schedule dispatch
-- Economics: multi-year simulation with replacement logic; NPV across three scenarios
-- Validation results: SAM vs. HOMER within 3% (feature-matched); SAM vs. hardware Li-ion <9% SOC RMSE (dispatch-mode), <1% SOC RMSE (discharge-only)
 - Chemistry defaults: NMC, NCA, LFP, LMO, LCO, LMO/LTO — changing chemistry changes parameter defaults, not model equations
 
 **Reference sources:**
 
 - `nrel_64641_sam_technoeconomic_summary.md` — primary; full architecture, sub-models, validation results
-
----
+- `nrel_67102_life_prediction_summary.md`
 
 ### 3.6 Commercial Platforms: TWAICE, ACCURE, Zitara
 
@@ -496,17 +404,14 @@ A side-by-side review of the three commercial analytics/digital twin platforms.
 
 **Reference sources:**
 
+- `twaice_essrf2023_summary.md` — TWAICE profile, case studies, data requirements, industry failure statistics
 - `accure_2024_soc_lfp_whitepaper_summary.md` — ACCURE SOC correction product
 - `dubarry_2023_mechanistic_modeling_accure_summary.md` — ACCURE degradation diagnostics product
 - `zitara_lithium_ion_battery_degradation.md` — Zitara's approach and positioning
 
----
-
 ## 4. Design Approach for DUET's BESS Module
 
 **Purpose of this section:** Translate the landscape survey findings into concrete design recommendations for DUET's BESS module. This section flows directly into the **architecture document** and **I/O specification** (TBA).
-
----
 
 ### 4.1 DUET BESS Position in the Landscape
 
@@ -519,8 +424,6 @@ A side-by-side review of the three commercial analytics/digital twin platforms.
 - What to build for PoC:
   - Forward simulation engine + semi-empirical degradation model
   - Model-vs-actual comparison framework: how to translate real BMS/SCADA data from an actual BESS and compare it to the digital twin model at the correct fidelity
-
----
 
 ### 4.2 Design Principles
 
@@ -543,11 +446,11 @@ The following principles govern all PoC design decisions and carry forward into 
 
 **Principle 6: Degradation is its own domain.** Calendar aging, cycle-based capacity fade (DoD-dependent), rainflow counting, chemistry-specific parameterization, and resistance growth are complex enough to warrant a dedicated module with its own state, interface, and test suite. The degradation model receives operating conditions from the simulation engine and returns updated capacity and resistance — it does not reach into the voltage or thermal model internals. This clean boundary also makes it straightforward to swap degradation model (see 4.3 below) without touching the rest of the stack.
 
----
-
 ### 4.3 Model Tiering Strategy
 
 We propose DUET BESS PoC implements a tiered degradation model framework so that model fidelity can be matched to available cell/module/rack technical specs and parameterization data. The common interface across all tiers is the key architectural commitment.
+
+Tiers 1–3 are **forward predictive models** suitable for DUET's simulation engine. Tier 4 is a **diagnostic/validation tool** that operates on measured data or validates the forward models' assumptions; it is not part of the production simulation loop. Mechanistic decomposition (Section 3.3) sits alongside Tier 4 as a diagnostic capability — applicable to DUET's model-vs-actual comparison layer rather than the forward simulation.
 
 **Interface contract all tiers should implement:**
 
@@ -572,8 +475,6 @@ A well specified interface contract means the dispatch engine and post-processin
 - `pybamm_continuum_models_liiondb_summary.md` — interface contract concept, spectrum table
 - `gwayi_2025_empirical_aging_models_review_summary.md` — tiered fallback table (last section)
 
----
-
 ### 4.4 Chemistry Strategy
 
 - Priority chemistries: LFP (dominant new deployments) and NMC (dominant installed base)
@@ -587,10 +488,8 @@ A well specified interface contract means the dispatch engine and post-processin
 
 **Reference sources:**
 
-- `accure_2024_soc_lfp_whitepaper_summary.md` — LFP voltage/SOC model requirements
+- `accure_2024_soc_lfp_whitepaper_summary.md` — ACCURE SOC correction product
 - `gwayi_2025_empirical_aging_models_review_summary.md` — LFP parameterizations across catalog; CCYACM3 recommendation
-
----
 
 ### 4.5 Integration with DUET's Existing Architecture
 
@@ -604,10 +503,6 @@ A well specified interface contract means the dispatch engine and post-processin
   - BMS layer — no PV equivalent
   - Degradation model — PV has degradation too but different model
 - Integration point for SCADA comparison: same SCADA data model that handles PV actual-vs-predicted should be extended to accept BESS signals (I, V, T, SOC, cell voltages)
-
-**Reference sources:**
-
-- `solar_plant_hierarchy_annotated.md` — Enurgen's existing DUET hierarchy (the structure to match and extend)
 
 ---
 

@@ -171,14 +171,16 @@ Goals:
 - The minimum battery model: coulomb counting for SOC tracking (`SOC(t+Δt) = SOC(t) − I·Δt / C_usable`)  
 - Voltage model: terminal voltage as a function of OCV(SOC), internal resistance, and current (`V = OCV(SOC) − I·R_internal`)  
 - More complete: Tremblay-Dessaint generalized Shepherd model (SAM's approach) — captures exponential and nominal voltage zones from datasheet  
+- Alternative: Equivalent Circuit Model (ECM) with N RC branches — captures transient dynamics (charge-transfer, diffusion) in addition to steady-state OCV and Ohmic resistance. The aging-aware ECM variant parameterizes OCV, R₀, and RC elements as functions of SOC, temperature, *and SOH* — enabling the voltage model to track how electrical behavior changes as the battery degrades  
 - Most complete: DFN/SPMe electrochemical model (PyBaMM) — resolves solid-phase diffusion, Butler-Volmer kinetics, electrolyte transport (see 3.4)  
-- The "datasheet-parameterizable" principle: SAM's voltage model parameterized from 6 datasheet values (`V_full, V_exp, V_nom, q_exp, q_nom, R`); DFN needs 30+ characterization parameters (see 3.4)  
+- The "datasheet-parameterizable" principle: SAM's 2015 voltage model parameterized from 6 datasheet values (`V_full, V_exp, V_nom, q_exp, q_nom, R`); DFN needs 30+ characterization parameters (see 3.4)  
 - Chemistry-specific voltage behavior: LFP flat OCV with hysteresis; NMC monotonically sloped OCV
 
 **References:**
 
 - DiOrio, N., et al. *Technoeconomic Modeling of Battery Energy Storage in SAM.* NREL/TP-6A20-64641, 2015\. ([PDF](https://www.nrel.gov/docs/fy15osti/64641.pdf)) — Tremblay-Dessaint model, datasheet parameter extraction  
-- Wang, A.A., et al. *Review of parameterisation and a novel database (LiionDB) for continuum Li-ion battery models.* Progress in Energy, vol. 4, 032004, 2022\. ([DOI](https://doi.org/10.1088/2516-1083/ac692c)) — DFN model structure
+- Wang, A.A., et al. *Review of parameterisation and a novel database (LiionDB) for continuum Li-ion battery models.* Progress in Energy, vol. 4, 032004, 2022\. ([DOI](https://doi.org/10.1088/2516-1083/ac692c)) — DFN model structure  
+- Di Fonso, R., et al. *Data-Driven Modeling of Li-Ion Battery Based on the Manufacturer Specifications and Laboratory Measurements.* IEEE Trans. Ind. Appl., Vol. 61, No. 2, 2025\. ([DOI](https://doi.org/10.1109/TIA.2025.3532572)) — ECM parameterization from datasheets; three-tier methodology
 
 ### 2.2 Thermal Model
 
