@@ -7,7 +7,7 @@ BESS performance modeling, dispatch optimization architecture, and financial ana
 | Task | Description | Status |
 |------|-------------|--------|
 | **1** | BESS Modeling Landscape & Architecture Design | 🔄 In progress |
-| **2A** | Core BESS Performance Simulation Engine | ⏳ Pending |
+| **2A** | Core BESS Performance Simulation Engine | 🔄 In progress |
 | **2B** | Degradation & State-of-Health Model | ⏳ Pending |
 | 3 | Dispatch Optimization PoC | Future phase |
 | 4 | Financial & Lifetime Post-Processing | Future phase |
