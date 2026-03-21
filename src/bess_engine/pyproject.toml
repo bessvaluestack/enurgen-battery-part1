@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "duet-bess"
+version = "0.1.0"
+description = "BESS simulation engine for the DUET digital twin platform"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Proprietary — Valuestack / Enurgen"}
+
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+]
+
+[project.optional-dependencies]
+# PySAM is the validated physics engine (Task 2A production mode)
+pysam = ["nrel-pysam>=5.0"]
+
+# Development / testing
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
+# Full stack (PySAM + dev tools)
+all = [
+    "nrel-pysam>=5.0",
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
